@@ -1,5 +1,7 @@
 package assignment4;
 
+import assignment4.Critter.CritterShape;
+
 /**
  * A criiter of "Ninja", who will suicide after 10 rounds.
  * It has one half chance to run away
@@ -25,7 +27,13 @@ public class Critter4 extends Critter {
 			return true;
 		} else {
 			dir = Critter.getRandomInt(8);
-			run(dir);
+			if (this.look(dir, true) == null) {
+				run(dir);
+			}
+			else {
+				dir = Critter.getRandomInt(8);
+				run(dir);
+			}
 			return false;
 		}
 	}
@@ -41,5 +49,20 @@ public class Critter4 extends Critter {
 		} else {
 			this.setEnergy(this.getEnergy() - 2);
 		}
+	}
+	
+	@Override
+	public CritterShape viewShape() { 
+		return CritterShape.CIRCLE; 
+	}
+
+	@Override
+	public javafx.scene.paint.Color viewOutlineColor() { 
+		return javafx.scene.paint.Color.SEASHELL; 
+	}
+	
+	@Override
+	public javafx.scene.paint.Color viewFillColor() {
+		return javafx.scene.paint.Color.BLACK; 
 	}
 }

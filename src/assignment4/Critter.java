@@ -1,6 +1,6 @@
 package assignment4;
 /* CRITTERS Critter.java
- * EE422C Project 4 submission by
+ * EE422C Project 5 submission by
  * Xin Geng
  * xg2543
  * 15465
@@ -15,11 +15,6 @@ import java.util.List;
 
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-
-/* see the PDF for descriptions of the methods and fields in this class
- * you may add fields, methods or inner classes to Critter ONLY if you make your additions private
- * no new public, protected or default-package code or data can be added to Critter
- */
 
 public abstract class Critter {
 
@@ -72,38 +67,12 @@ public abstract class Critter {
 		} else {
 			scalar = 2;
 		}
-		
-		switch (direction) {
-		case 0:
-			this.updateDir(1*scalar, 0);
-			break;
-		case 1:
-			this.updateDir(1*scalar, -1*scalar);
-			break;
-		case 2:
-			this.updateDir(0, -1*scalar);
-			break;
-		case 3:
-			this.updateDir(-1*scalar, -1*scalar);
-			break;
-		case 4:
-			this.updateDir(-1*scalar, 0);
-			break;
-		case 5:
-			this.updateDir(-1*scalar, 1*scalar);
-			break;
-		case 6:
-			this.updateDir(0, 1*scalar);
-			break;
-		case 7:
-			this.updateDir(1*scalar, 1*scalar);
-			break;
-		}
+		move(this, direction, scalar);
 		targetX = this.x_coord;
 		targetY = this.y_coord;
 		this.x_coord = currentX;
 		this.y_coord = currentY;
-		for (Critter c: population) {
+		for (Critter c : population) {
 			if (c.x_coord == targetX && c.y_coord == targetY) {
 				return c.toString();
 			}
@@ -118,12 +87,12 @@ public abstract class Critter {
 			}
 		}
 		Painter.paintGridLines(pane);
-		for(Critter c : population) {
+		for (Critter c : population) {
 			CritterShape shape = c.viewShape();
 			Color outlineColor = c.viewOutlineColor();
 			Color fillColor = c.viewFillColor();
-			if(map[c.getY()][c.getX()] < 1) {
-				Painter.paint(c,shape,outlineColor,fillColor,pane);
+			if (map[c.getY()][c.getX()] < 1) {
+				Painter.paint(c, shape, outlineColor, fillColor, pane);
 				map[c.getY()][c.getX()]++;
 			}
 		}
@@ -200,11 +169,11 @@ public abstract class Critter {
 	protected void setEnergy(int energy) {
 		this.energy = energy;
 	}
-	
+
 	public int getX() {
 		return this.x_coord;
 	}
-	
+
 	public int getY() {
 		return this.y_coord;
 	}
@@ -225,32 +194,7 @@ public abstract class Critter {
 		if (this.energy <= 0) {
 			return;
 		}
-		switch (direction) {
-		case 0:
-			this.updateDir(1, 0);
-			break;
-		case 1:
-			this.updateDir(1, -1);
-			break;
-		case 2:
-			this.updateDir(0, -1);
-			break;
-		case 3:
-			this.updateDir(-1, -1);
-			break;
-		case 4:
-			this.updateDir(-1, 0);
-			break;
-		case 5:
-			this.updateDir(-1, 1);
-			break;
-		case 6:
-			this.updateDir(0, 1);
-			break;
-		case 7:
-			this.updateDir(1, 1);
-			break;
-		}
+		move(this, direction, 1);
 	}
 
 	/**
@@ -269,32 +213,7 @@ public abstract class Critter {
 		if (this.energy <= 0) {
 			return;
 		}
-		switch (direction) {
-		case 0:
-			this.updateDir(2, 0);
-			break;
-		case 1:
-			this.updateDir(2, -2);
-			break;
-		case 2:
-			this.updateDir(0, -2);
-			break;
-		case 3:
-			this.updateDir(-2, -2);
-			break;
-		case 4:
-			this.updateDir(-2, 0);
-			break;
-		case 5:
-			this.updateDir(-2, 2);
-			break;
-		case 6:
-			this.updateDir(0, 2);
-			break;
-		case 7:
-			this.updateDir(2, 2);
-			break;
-		}
+		move(this, direction, 2);
 	}
 
 	/**
@@ -316,32 +235,7 @@ public abstract class Critter {
 			offspring.energy -= newBorn.energy;
 			newBorn.x_coord = offspring.x_coord;
 			newBorn.y_coord = offspring.y_coord;
-			switch (direction) {
-			case 0:
-				newBorn.updateDir(1, 0);
-				break;
-			case 1:
-				newBorn.updateDir(1, -1);
-				break;
-			case 2:
-				newBorn.updateDir(0, -1);
-				break;
-			case 3:
-				newBorn.updateDir(-1, -1);
-				break;
-			case 4:
-				newBorn.updateDir(-1, 0);
-				break;
-			case 5:
-				newBorn.updateDir(-1, 1);
-				break;
-			case 6:
-				newBorn.updateDir(0, 1);
-				break;
-			case 7:
-				newBorn.updateDir(1, 1);
-				break;
-			}
+			move(newBorn, direction, 1);
 			babies.add(newBorn);
 		} catch (Exception e) {
 		}
@@ -437,7 +331,7 @@ public abstract class Critter {
 		}
 		System.out.println();
 	}
-	
+
 	public static String runStats2(List<Critter> critters) {
 		String output = new String();
 		output += "" + critters.size() + " critters as follows -- ";
@@ -453,7 +347,7 @@ public abstract class Critter {
 		}
 		String prefix = "";
 		for (String s : critter_count.keySet()) {
-			
+
 			output += prefix + s + ":" + critter_count.get(s);
 			prefix = ", ";
 		}
@@ -772,4 +666,34 @@ public abstract class Critter {
 			this.y_coord -= Params.world_height;
 		}
 	}
+
+	private static void move(Critter c, int dir, int scalar) {
+		switch (dir) {
+		case 0:
+			c.updateDir(1 * scalar, 0);
+			break;
+		case 1:
+			c.updateDir(1 * scalar, -1 * scalar);
+			break;
+		case 2:
+			c.updateDir(0, -1 * scalar);
+			break;
+		case 3:
+			c.updateDir(-1 * scalar, -1 * scalar);
+			break;
+		case 4:
+			c.updateDir(-1 * scalar, 0);
+			break;
+		case 5:
+			c.updateDir(-1 * scalar, 1 * scalar);
+			break;
+		case 6:
+			c.updateDir(0, 1 * scalar);
+			break;
+		case 7:
+			c.updateDir(1 * scalar, 1 * scalar);
+			break;
+		}
+	}
+
 }

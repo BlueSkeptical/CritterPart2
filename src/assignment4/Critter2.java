@@ -1,4 +1,7 @@
 package assignment4;
+
+import assignment4.Critter.CritterShape;
+
 /**
  * A critter of "Pikachu", who can gain energy during fight if 
  * it has more than half start energy. It will run when energy drop less
@@ -46,5 +49,26 @@ public class Critter2 extends Critter {
 		System.out.print("" + pikachu.size() + " total Pikachu    ");
 		System.out.print("Thunderbolt!");
 		System.out.println();
+	}
+	
+	public static String runStats2(java.util.List<Critter> pikachu) {
+		String output = "" + pikachu.size() + " total Pikachu    Thunderbolt!\n";
+		return output;
+	}
+	
+	
+	@Override
+	public CritterShape viewShape() { 
+		return CritterShape.TRIANGLE; 
+	}
+
+	@Override
+	public javafx.scene.paint.Color viewOutlineColor() { 
+		return javafx.scene.paint.Color.ROSYBROWN; 
+	}
+	
+	@Override
+	public javafx.scene.paint.Color viewFillColor() {
+		return javafx.scene.paint.Color.YELLOW; 
 	}
 }

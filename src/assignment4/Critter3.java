@@ -1,4 +1,7 @@
 package assignment4;
+
+import assignment4.Critter.CritterShape;
+
 /**
  * This class is a "bat", the critter does not walk nor run, 
  * in every do time step, it chose a place on the map randomly and fly there
@@ -33,5 +36,19 @@ public class Critter3 extends Critter {
 		int y = getRandomInt(Params.world_height);
 		this.setX(x);
 		this.setY(y);
+	}
+	@Override
+	public CritterShape viewShape() { 
+		return CritterShape.DIAMOND; 
+	}
+
+	@Override
+	public javafx.scene.paint.Color viewOutlineColor() { 
+		return javafx.scene.paint.Color.SADDLEBROWN; 
+	}
+	
+	@Override
+	public javafx.scene.paint.Color viewFillColor() {
+		return javafx.scene.paint.Color.DARKOLIVEGREEN; 
 	}
 }

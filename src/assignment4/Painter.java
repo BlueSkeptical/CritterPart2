@@ -10,16 +10,24 @@ public class Painter {
 	/*
 	 * Returns a square or a circle, according to shapeIndex
 	 */
-	public static double size = 25;
+	public static double size;
+
+	private static void setSize() {
+		size = Math.max(Params.world_height, Params.world_width);
+		size = 750 / size - 1;
+		if (size < 15) {
+			size = 15;
+		}
+	}
 
 	public static void paintGridLines(GridPane grid) {
-		// chang duan
+		setSize();
 		grid.getChildren().clear();
 		for (int r = 0; r < Params.world_height; r++) {
 			for (int c = 0; c < Params.world_width; c++) {
 				Shape s = new Rectangle(size, size);
 				s.setFill(null);
-				s.setStroke(Color.CHOCOLATE);
+				s.setStroke(Color.PURPLE);
 				grid.add(s, c, r);
 			}
 		}
@@ -57,7 +65,7 @@ public class Painter {
 		case SQUARE:
 			s = new Polygon();
 			p = (Polygon) s;
-			p.getPoints().addAll(new Double[] { 1.0,1.0,size-1,1.0,size-1,size-1,1.0,size-1 });
+			p.getPoints().addAll(new Double[] { 1.0, 1.0, size - 1, 1.0, size - 1, size - 1, 1.0, size - 1 });
 			s = p;
 			break;
 		case TRIANGLE:
@@ -69,8 +77,8 @@ public class Painter {
 		case DIAMOND:
 			s = new Polygon();
 			p = (Polygon) s;
-			p.getPoints().addAll(new Double[] { size / 2 - 1, 1.0, 1.0, size / 2 - 1, 
-					size / 2 - 1, size - 1, size - 1, size / 2 - 1 });
+			p.getPoints().addAll(new Double[] { size / 2 - 1, 1.0, 1.0, size / 2 - 1, size / 2 - 1, size - 1, size - 1,
+					size / 2 - 1 });
 			s = p;
 			break;
 		case STAR:
