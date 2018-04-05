@@ -1,6 +1,6 @@
-package assignment4;
+package assignment5;
 
-import assignment4.Critter.CritterShape;
+import assignment5.Critter.CritterShape;
 
 /**
  * The critter is a "crab" which can only move horizontally, one half chance of

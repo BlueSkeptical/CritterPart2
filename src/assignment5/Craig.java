@@ -1,4 +1,4 @@
-package assignment4;
+package assignment5;
 
 
 public class Craig extends Critter {

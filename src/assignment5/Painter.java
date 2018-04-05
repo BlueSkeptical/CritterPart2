@@ -1,17 +1,18 @@
-package assignment4;
+package assignment5;
 
-import assignment4.Critter.CritterShape;
-import assignment4.Main;
+import assignment5.Critter.CritterShape;
+import assignment5.Main;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 
 public class Painter {
-	/*
-	 * Returns a square or a circle, according to shapeIndex
-	 */
+
 	public static double size;
 
+	/**
+	 * set the size of each rectangle
+	 */
 	private static void setSize() {
 		size = Math.max(Params.world_height, Params.world_width);
 		size = 750 / size - 1;
@@ -19,7 +20,11 @@ public class Painter {
 			size = 15;
 		}
 	}
-
+	
+	/**
+	 * paint the line for the world
+	 * @param grid the pane line goes on
+	 */
 	public static void paintGridLines(GridPane grid) {
 		setSize();
 		grid.getChildren().clear();
@@ -58,24 +63,29 @@ public class Painter {
 	public static void paint(Critter c, CritterShape shape, Color outlineColor, Color fillColor, GridPane grid) {
 		Shape s = null;
 		Polygon p = null;
+		
 		switch (shape) {
 		case CIRCLE:
 			s = new Circle(size / 2);
+			
 			break;
 		case SQUARE:
 			s = new Polygon();
+			
 			p = (Polygon) s;
 			p.getPoints().addAll(new Double[] { 1.0, 1.0, size - 1, 1.0, size - 1, size - 1, 1.0, size - 1 });
 			s = p;
 			break;
 		case TRIANGLE:
 			s = new Polygon();
+			
 			p = (Polygon) s;
 			p.getPoints().addAll(new Double[] { size / 2 - 2, 0.0, 0.0, size - 2, size - 2, size - 2 });
 			s = p;
 			break;
 		case DIAMOND:
 			s = new Polygon();
+			
 			p = (Polygon) s;
 			p.getPoints().addAll(new Double[] { size / 2 - 1, 1.0, 1.0, size / 2 - 1, size / 2 - 1, size - 1, size - 1,
 					size / 2 - 1 });
@@ -83,6 +93,7 @@ public class Painter {
 			break;
 		case STAR:
 			s = new Polygon();
+			
 			p = (Polygon) s;
 			p.getPoints()
 					.addAll(new Double[] { size / 2 - 2, 1.0, 3 * size / 8 - 2, size / 3 - 2, 1.0, size / 3 - 2,
@@ -96,5 +107,4 @@ public class Painter {
 		s.setStroke(outlineColor);
 		grid.add(s, c.getX(), c.getY());
 	}
-
 }

@@ -1,6 +1,6 @@
-package assignment4;
+package assignment5;
 
-import assignment4.Critter.CritterShape;
+import assignment5.Critter.CritterShape;
 
 /**
  * This class is a "bat", the critter does not walk nor run, 

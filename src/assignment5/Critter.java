@@ -1,4 +1,4 @@
-package assignment4;
+package assignment5;
 /* CRITTERS Critter.java
  * EE422C Project 5 submission by
  * Xin Geng
@@ -17,7 +17,17 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
 public abstract class Critter {
-
+	
+	private static String myPackage;
+	private static List<Critter> population = new java.util.ArrayList<Critter>();
+	private static List<Critter> babies = new java.util.ArrayList<Critter>();
+	private static List<Critter> moveHistory = new java.util.ArrayList<Critter>();
+	// map update in every call to Time step to update numbers of critter in each
+	// coordinates
+	private static int map[][] = new int[Params.world_height][Params.world_width];
+	
+	private static java.util.Random rand = new java.util.Random();
+	
 	/* NEW FOR PROJECT 5 */
 	public enum CritterShape {
 		CIRCLE, SQUARE, TRIANGLE, DIAMOND, STAR
@@ -56,6 +66,12 @@ public abstract class Critter {
 		myPackage = Critter.class.getPackage().toString().split(" ")[1];
 	}
 
+	/**
+	 * this is the look function specified on the pdf
+	 * @param direction the target direction
+	 * @param steps determine walk or run
+	 * @return a critter if it is at the 'looked' position
+	 */
 	protected final String look(int direction, boolean steps) {
 		int currentX = this.x_coord;
 		int currentY = this.y_coord;
@@ -67,11 +83,14 @@ public abstract class Critter {
 		} else {
 			scalar = 2;
 		}
+		//pretending to move this critter
 		move(this, direction, scalar);
+		//move the critter back to original place, get the target location
 		targetX = this.x_coord;
 		targetY = this.y_coord;
 		this.x_coord = currentX;
 		this.y_coord = currentY;
+		//check if the position is empty or not
 		for (Critter c : population) {
 			if (c.x_coord == targetX && c.y_coord == targetY) {
 				return c.toString();
@@ -79,18 +98,25 @@ public abstract class Critter {
 		}
 		return null;
 	}
-
+	
+	/**
+	 * sketch the world and update location of critters in real time
+	 * @param pane the pane shows the world
+	 */
 	public static void displayWorld(GridPane pane) {
 		for (int w = 0; w < Params.world_width; w++) {
 			for (int h = 0; h < Params.world_height; h++) {
 				map[h][w] = 0;
 			}
 		}
+		// to paint the world
 		Painter.paintGridLines(pane);
+		//sketch all critters
 		for (Critter c : population) {
 			CritterShape shape = c.viewShape();
 			Color outlineColor = c.viewOutlineColor();
 			Color fillColor = c.viewFillColor();
+			//avoid shape overlap
 			if (map[c.getY()][c.getX()] < 1) {
 				Painter.paint(c, shape, outlineColor, fillColor, pane);
 				map[c.getY()][c.getX()]++;
@@ -102,21 +128,6 @@ public abstract class Critter {
 	 * component. // public static void displayWorld() {}
 	 */
 
-	private static String myPackage;
-	private static List<Critter> population = new java.util.ArrayList<Critter>();
-	private static List<Critter> babies = new java.util.ArrayList<Critter>();
-	private static List<Critter> moveHistory = new java.util.ArrayList<Critter>();
-	// map update in every call to Time step to update numbers of critter in each
-	// coordinates
-	private static int map[][] = new int[Params.world_height][Params.world_width];
-
-	// Gets the package name. This assumes that Critter and its subclasses are all
-	// in the same package.
-	static {
-		myPackage = Critter.class.getPackage().toString().split(" ")[1];
-	}
-
-	private static java.util.Random rand = new java.util.Random();
 
 	public static int getRandomInt(int max) {
 		return rand.nextInt(max);
@@ -331,7 +342,12 @@ public abstract class Critter {
 		}
 		System.out.println();
 	}
-
+	
+	/**
+	 * return the stats as a string
+	 * @param critters a list of critters
+	 * @return a string of stats
+	 */
 	public static String runStats2(List<Critter> critters) {
 		String output = new String();
 		output += "" + critters.size() + " critters as follows -- ";
@@ -667,6 +683,12 @@ public abstract class Critter {
 		}
 	}
 
+	/**
+	 * a basic move function, can be walk or run depends on the scalar
+	 * @param c the moving critter
+	 * @param dir the direction
+	 * @param scalar 1-walk, 2-run
+	 */
 	private static void move(Critter c, int dir, int scalar) {
 		switch (dir) {
 		case 0:

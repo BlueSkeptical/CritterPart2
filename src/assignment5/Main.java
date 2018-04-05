@@ -1,6 +1,6 @@
-package assignment4;
+package assignment5;
 /* CRITTERS Critter.java
- * EE422C Project 4 submission by
+ * EE422C Project 5 submission by
  * Xin Geng
  * xg2543
  * 15465
@@ -51,12 +51,16 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			File file = new File("src/assignment4");
+			// stage and scene and files
+			File file = new File("src/assignment5");
+			String[] fileNames = file.list();
+			ArrayList<String> nameLists = new ArrayList<String>();
 			Stage secondaryStage = new Stage();
 			Stage thirdStage = new Stage();
 			Scene gridScene = new Scene(grid, 750, 750);
 			Scene controlScene = new Scene(control, 600, 300);
 			Scene panelScene = new Scene(panel, 300, 300);
+			// children for the pane
 			ChoiceBox<String> critterType = new ChoiceBox<String>();
 			ChoiceBox<Integer> stepNum = new ChoiceBox<Integer>();
 			ChoiceBox<Integer> frameNum = new ChoiceBox<Integer>();
@@ -82,6 +86,8 @@ public class Main extends Application {
 			Label quitL = new Label("quit:");
 			Label animationL = new Label("animation:");
 			Label stopL = new Label("stop:");
+
+			// initialization
 			tl.setCycleCount(Animation.INDEFINITE);
 			grid.setGridLinesVisible(true);
 			primaryStage.setScene(gridScene);
@@ -91,9 +97,7 @@ public class Main extends Application {
 			secondaryStage.show();
 			thirdStage.show();
 			Critter.displayWorld(grid);
-
-			String[] fileNames = file.list();
-			ArrayList<String> nameLists = new ArrayList<String>();
+			// get the qualified critter file names
 			for (String fName : fileNames) {
 				String[] cName = fName.split(".java");
 				String pName = myPackage.toString();
@@ -109,6 +113,7 @@ public class Main extends Application {
 			for (int i = 0; i < nameLists.size(); i++) {
 				critterSubNames[i] = nameLists.get(i);
 			}
+			// initialization for children
 			critterType.getItems().addAll(critterSubNames);
 			critterType.setValue(critterSubNames[0]);
 			stepNum.getItems().addAll(0, 1, 10, 50, 100, 1000);
@@ -117,7 +122,7 @@ public class Main extends Application {
 			frameNum.setValue(1);
 			statsType.getItems().addAll(critterSubNames);
 			statsType.setValue(critterSubNames[0]);
-
+			// buttons
 			show.setOnAction(new EventHandler<ActionEvent>() {
 				public void handle(ActionEvent e) {
 					Critter.displayWorld(grid);
@@ -139,6 +144,7 @@ public class Main extends Application {
 							}
 							num--;
 						}
+						Critter.displayWorld(grid);
 					}
 				}
 			});
@@ -161,12 +167,14 @@ public class Main extends Application {
 				public void handle(ActionEvent e) {
 					String name = statsType.getValue();
 					try {
+						// make the qualified name
 						String cName = myPackage.toString();
 						String output = new String();
 						cName += ".";
 						cName += name;
 						java.util.List<Critter> list = Critter.getInstances(cName);
 						Class placeHolder = Class.forName(cName);
+						// run stats 2 for one selected critter
 						java.lang.reflect.Method theMethod = placeHolder.getMethod("runStats2", java.util.List.class);
 						output = (String) theMethod.invoke(placeHolder, list);
 						statsInfo.setText(output);
@@ -195,6 +203,7 @@ public class Main extends Application {
 			animation.setOnAction(new EventHandler<ActionEvent>() {
 				public void handle(ActionEvent e) {
 					int num = frameNum.getValue();
+					// update animation for each frame
 					KeyFrame updateWorld = new KeyFrame(Duration.seconds(.400), new EventHandler<ActionEvent>() {
 						public void handle(ActionEvent event) {
 							for (int i = 0; i != num; i++) {
@@ -215,7 +224,7 @@ public class Main extends Application {
 					tl.stop();
 				}
 			});
-
+			// add children to pane
 			control.add(showL, 0, 0);
 			control.add(show, 0, 1);
 			control.add(makeL, 2, 0);
@@ -245,6 +254,12 @@ public class Main extends Application {
 		}
 	}
 
+	/**
+	 * this function updates all critters' status
+	 * 
+	 * @param critterType
+	 * @return the result
+	 */
 	private static String updateAllStats(ChoiceBox<String> critterType) {
 		String output = new String();
 		try {
@@ -254,8 +269,7 @@ public class Main extends Application {
 				cName += name;
 				java.util.List<Critter> list = Critter.getInstances(cName);
 				Class placeHolder = Class.forName(cName);
-				java.lang.reflect.Method theMethod = placeHolder.getMethod("runStats2",
-						java.util.List.class);
+				java.lang.reflect.Method theMethod = placeHolder.getMethod("runStats2", java.util.List.class);
 				output += (String) theMethod.invoke(placeHolder, list);
 				output += "\n";
 			}
@@ -263,6 +277,7 @@ public class Main extends Application {
 		}
 		return output;
 	}
+
 	public static void main(String[] args) {
 		launch(args);
 	}

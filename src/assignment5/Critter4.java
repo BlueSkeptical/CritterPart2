@@ -1,6 +1,6 @@
-package assignment4;
+package assignment5;
 
-import assignment4.Critter.CritterShape;
+import assignment5.Critter.CritterShape;
 
 /**
  * A criiter of "Ninja", who will suicide after 10 rounds.
